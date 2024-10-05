@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIDHA &mdash; TIDHA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="apidocs/index.html" />
+    <link rel="prev" title="TIDHA documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TIDHA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TIDHA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#no-virtual-environment">No Virtual Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TIDHA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TIDHA</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/intro.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="tidha">
+<h1>TIDHA<a class="headerlink" href="#tidha" title="Link to this heading"></a></h1>
+<p><strong>Time Domain Hydrodynamic Analysis</strong></p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
+<p>This project is created mainly to make a python code for hydrodynamic analysis. Most codes I found that works with hydrodynamic analysis use Fortran which I don’t understand.</p>
+</section>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading"></a></h2>
+<p>Curretly this only contain first order time series solver that use <code class="docutils literal notranslate"><span class="pre">scipy.integrate.solve_ivp</span></code>. The acceleration is formulated explicitly following <a class="reference external" href="https://www.orcina.com/webhelp/OrcaFlex/Content/html/Vesseltheory,Impulseresponseandconvolution.htm">Vessel theory: Impulse response and convolution</a>. The excitation force also calculated independently from the vessel movement at the moment. Pile force is one of the special force in this project. It is defined by the effect of individual pile reaction due to pile movement to the rigid body as a whole.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>To use this project at the current state, follows steps below to run the example file:</p>
+<ol class="arabic simple">
+<li><p>Install python, version 3.8 to 3.12 should works, I havent test other versions. Check if your system already have python installed by opening terminal/command prompt and run <code class="docutils literal notranslate"><span class="pre">python</span></code>. The terminal will give your python version or error if it haven’t been installed yet.</p></li>
+<li><p>Open terminal in the current directory. Windows users can open terminal in the current directory by opening context menu with shift + right click in the current directory windows explorer.</p></li>
+<li><p>Create virtual environment by running belows command on the terminal: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.</span></code>. The command should work for any python version above 3.3.</p></li>
+<li><p>Activate the environment in the terminal by running: <code class="docutils literal notranslate"><span class="pre">Scripts\activate</span></code>.</p></li>
+<li><p>Install libraries for the virtual environment by running following command: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p></li>
+<li><p>Run the <code class="docutils literal notranslate"><span class="pre">run.bat</span></code> file by double clicking for windows or convert this to sh file for linux user.</p></li>
+</ol>
+<p>The script will run the python script in the <code class="docutils literal notranslate"><span class="pre">examples\dummy_pontoon\run.py</span></code>. You can copy the content of <code class="docutils literal notranslate"><span class="pre">dummy_pontoon</span></code> folder to new <code class="docutils literal notranslate"><span class="pre">cases\your_analysis_case</span></code> folder as the template and modify it. Note that you have to provide <code class="docutils literal notranslate"><span class="pre">your_analysis_case\Wamit_file</span></code> that contains solved BEM case accroding to your vessel geometry. You can use free hydrodyamic BEM solver like HAMS or NEMOH and convert your data to Wamit format using BEMRosetta or BEMIO. After moving your analysis folders you have to put the folder path into the run.bat in order for it to be able to run. You can run the cases in batch by including them in the bat file. Your bat file will looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Scripts</span>\<span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">cases</span>\<span class="n">pontoon0deg</span>\<span class="n">run</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Scripts</span>\<span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">cases</span>\<span class="n">pontoon45deg</span>\<span class="n">run</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Scripts</span>\<span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">cases</span>\<span class="n">pontoon90deg</span>\<span class="n">run</span><span class="o">.</span><span class="n">py</span>
+<span class="n">pause</span>
+</pre></div>
+</div>
+</section>
+<section id="no-virtual-environment">
+<h2>No Virtual Environment<a class="headerlink" href="#no-virtual-environment" title="Link to this heading"></a></h2>
+<p>You can run the code without virtual environment as long as all dependencies are instaled in your current system. It is not recomennded as it can potentially cause conflic of dependencies.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="TIDHA documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="apidocs/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, nedisy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -15,12 +15,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Build the documentation using the make.bat command
-      - name: Build Sphinx documentation
-        run: |
-          cd docs
-          ./make.bat html  # This builds the docs into _build/html
-
       # Deploy to GitHub Pages using the output from the build
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

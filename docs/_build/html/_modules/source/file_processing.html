@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>source.file_processing &mdash; TIDHA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            TIDHA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">TIDHA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidocs/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">TIDHA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">source.file_processing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for source.file_processing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Read the file, skipping the header lines and parsing data</span>
+<div class="viewcode-block" id="parse_file">
+<a class="viewcode-back" href="../../apidocs/source/source.file_processing.html#source.file_processing.parse_file">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read text file in the format of space-separated value and return numpy array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="c1"># Skip the first lines with metadata and headers</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">start_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">):</span>  <span class="c1"># Detect when the actual data starts</span>
+                <span class="n">start_idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">2</span>
+                <span class="k">break</span>
+
+        <span class="c1"># Load the numerical data, skipping non-numeric rows</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:],</span> <span class="n">delimiter</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="split_path_name_extension">
+<a class="viewcode-back" href="../../apidocs/source/source.file_processing.html#source.file_processing.split_path_name_extension">[docs]</a>
+<span class="k">def</span> <span class="nf">split_path_name_extension</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Split path to directory, name, and extension</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Get the directory path</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="c1"># Get the base name (file name with extension)</span>
+    <span class="n">base_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="c1"># Find the last dot to split the name and extension</span>
+    <span class="n">last_dot_index</span> <span class="o">=</span> <span class="n">base_name</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">last_dot_index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">base_name</span><span class="p">[:</span><span class="n">last_dot_index</span><span class="p">]</span>  <span class="c1"># Name without extension</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">base_name</span><span class="p">[</span><span class="n">last_dot_index</span><span class="p">:]</span>    <span class="c1"># Extension with dot</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">base_name</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># No extension</span>
+
+    <span class="k">return</span> <span class="n">directory</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ext</span></div>
+
+
+<div class="viewcode-block" id="import_wamit">
+<a class="viewcode-back" href="../../apidocs/source/source.file_processing.html#source.file_processing.import_wamit">[docs]</a>
+<span class="k">def</span> <span class="nf">import_wamit</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    # Import WAMIT File from path of any of the file with the name\n</span>
+<span class="sd">    \n</span>
+<span class="sd">    All formulas used refer to the Wamit specification at [Wamit Manual](https://www.wamit.com/manualv7.4/wamit_v74manualch3.html)\n</span>
+<span class="sd">    \n</span>
+<span class="sd">    ## Input\n</span>
+<span class="sd">    `path`, expected .hst, .frc, .1, .3, .pot file from the same path with the same name\n</span>
+<span class="sd">    \n</span>
+<span class="sd">    ## Returns\n</span>
+<span class="sd">    1. rho_water: Water density, (kg/m3)\n</span>
+<span class="sd">    2. Mass: Mass Matrix, (6 x 6) (kg)\n</span>
+<span class="sd">    3. Hstiff: Hydrostatic stiffness matrix, (6 x 6)\n</span>
+<span class="sd">    4. Hw: Water Depth, (m)\n</span>
+<span class="sd">    5. beta: wave angle, (deg)\n</span>
+<span class="sd">    6. Xbody: Body&#39;s center coordinate center relative to global, [x y z ry] (m)\n</span>
+<span class="sd">    7. CGbody: Body&#39;s center of gravity accroding to body&#39;s coordinate system, [x y z] (m)\n</span>
+<span class="sd">    8. omega_i: Periods (float N) (rad/s)\n</span>
+<span class="sd">    9. A_0: Added mass at zero frequency (float 6 x 6) (kg)\n</span>
+<span class="sd">    10. A_inf: Added mass at infinite frequency (float 6 x 6) (kg)\n</span>
+<span class="sd">    11. A_i: Added mass at period of T_i (float 6 x 6 x N_period) (kg)\n</span>
+<span class="sd">    12. B_i: Radiation damping at period of T_i (float 6 x 6 x N_period) (N/(m/s)$^2$)\n</span>
+<span class="sd">    13. Fex_i: Exciting force from incoming and diffraction wave (complex 6 x N_period x N_heading) (N/m)\n</span>
+<span class="sd">    \n</span>
+<span class="sd">    ## Example usage:\n</span>
+<span class="sd">    `rho_water, Mass, Hstiff, Hw, beta, Xbody, CGbody, omega_i, A_0, A_inf, A_i, B_i, Fex_i = import_wamit(&quot;.\ship.1&quot;)`</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Split path to dir, name, ext</span>
+    <span class="nb">dir</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">split_path_name_extension</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+
+
+    <span class="c1"># Read potential control file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.pot&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dotpot</span><span class="p">:</span>
+        <span class="c1"># Read the lines to list of strings</span>
+        <span class="n">dotpotlines</span> <span class="o">=</span> <span class="n">dotpot</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+
+    <span class="c1"># Water Depth</span>
+    <span class="n">Hw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dotpotlines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Number of frequencies</span>
+    <span class="n">Ni</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dotpotlines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Periods</span>
+    <span class="n">omega_i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dotpotlines</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="n">Ni</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">omega_i</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="c1"># Number of incident angles</span>
+    <span class="n">Nbeta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dotpotlines</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># incident angles</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dotpotlines</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="n">Nbeta</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    
+    <span class="c1"># body reference point</span>
+    <span class="n">Xbody</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dotpotlines</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+
+
+    <span class="c1"># Read force control file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.frc&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dotfrc</span><span class="p">:</span>
+        <span class="c1"># Read the lines to list of strings</span>
+        <span class="n">dotfrclines</span> <span class="o">=</span> <span class="n">dotfrc</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="c1"># Water Density</span>
+    <span class="n">rho_water</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dotfrclines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Mass Matrix</span>
+    <span class="n">Mass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dotfrclines</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">11</span><span class="p">]):</span>
+        <span class="n">Mass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">6</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+
+    <span class="c1"># Body&#39;s center of gravity according to body&#39;s coordinate system</span>
+    <span class="n">CGbody</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dotfrclines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+
+    
+
+    <span class="c1"># Read hydrostatic stiffness file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.hst&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dothst</span><span class="p">:</span>
+        <span class="c1"># Read the lines to list of strings</span>
+        <span class="n">dothstlines</span> <span class="o">=</span> <span class="n">dothst</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="c1"># Hydrostatic stiffness matrix</span>
+    <span class="n">Hstiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dothstlines</span><span class="p">:</span>
+        <span class="n">splitted</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">splitted</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">Hstiff</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">Hstiff</span> <span class="o">*=</span> <span class="n">rho_water</span> <span class="o">*</span> <span class="mf">9.8066</span>
+
+
+    <span class="c1"># Read Added Mass and Radiation Damping </span>
+    <span class="n">dot1data1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.1&quot;</span><span class="p">,</span> <span class="n">max_rows</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span>
+    <span class="n">dot1data2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.1&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span>
+
+    <span class="c1"># Define initial arrays</span>
+    <span class="n">A_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">A_inf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">A_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">Ni</span><span class="p">))</span>
+    <span class="n">B_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">Ni</span><span class="p">))</span>
+    
+    <span class="c1"># Process the infinite frequency damping</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dot1data1</span><span class="p">[:</span><span class="mi">36</span><span class="p">]:</span>
+        <span class="c1"># Extract i, j, and value</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        
+        <span class="c1"># Assign the value to the corresponding position in the array</span>
+        <span class="n">A_0</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">*</span><span class="n">rho_water</span>
+        
+    <span class="c1"># Process the zero frequency damping</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dot1data1</span><span class="p">[</span><span class="mi">36</span><span class="p">:]:</span>
+        <span class="c1"># Extract i, j, and value</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        
+        <span class="c1"># Assign the value to the corresponding position in the array</span>
+        <span class="n">A_inf</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">*</span><span class="n">rho_water</span>
+
+    <span class="c1"># Process frequencies damping</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dot1data2</span><span class="p">:</span>
+        <span class="c1"># Extract i, j, and value</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">A_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">B_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">omega_i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">)</span>
+        
+        <span class="c1"># Assign the value to the corresponding position in the array</span>
+        <span class="n">A_i</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">A_value</span><span class="o">*</span><span class="n">rho_water</span>
+        <span class="n">B_i</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">B_value</span><span class="o">*</span><span class="n">rho_water</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Read exciting force from diffraction</span>
+    <span class="n">dot3data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.3&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Define initial arrays</span>
+    <span class="n">Fex_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="n">Ni</span><span class="p">,</span><span class="n">Nbeta</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+
+    <span class="c1"># Process the exciting force into array</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dot3data</span><span class="p">:</span>
+        <span class="c1"># Extract i, j, and value</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to 0-based index</span>
+        <span class="n">Re_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+        <span class="n">Im_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+        
+        <span class="c1"># angle index</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">omega_i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">beta</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">)</span>
+        <span class="c1"># Assign the value to the corresponding position in the array</span>
+        <span class="n">Fex_i</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Re_value</span> <span class="o">+</span> <span class="n">Im_value</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">rho_water</span><span class="o">*</span><span class="mf">9.8066</span>
+
+    <span class="k">return</span> <span class="n">rho_water</span><span class="p">,</span> <span class="n">Mass</span><span class="p">,</span> <span class="n">Hstiff</span><span class="p">,</span> <span class="n">Hw</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">Xbody</span><span class="p">,</span> <span class="n">CGbody</span><span class="p">,</span> <span class="n">omega_i</span><span class="p">,</span> <span class="n">A_0</span><span class="p">,</span> <span class="n">A_inf</span><span class="p">,</span> <span class="n">A_i</span><span class="p">,</span> <span class="n">B_i</span><span class="p">,</span> <span class="n">Fex_i</span></div>
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, nedisy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
