@@ -1,0 +1,29 @@
+name: Build and Deploy Docs
+
+# Trigger the workflow on push to the main branch (or other branches if needed)
+on:
+  push:
+    branches:
+      - master  # Or whatever your main branch is named
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest  # Because you're using a .bat file, we'll use a Windows runner
+
+    steps:
+      # Checkout the repository to the runner
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Build the documentation using the make.bat command
+      - name: Build Sphinx documentation
+        run: |
+          cd docs
+          ./make.bat html  # This builds the docs into _build/html
+
+      # Deploy to GitHub Pages using the output from the build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html  # Directory where the HTML files are located after the build
