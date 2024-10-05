@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>source.TIDHA &mdash; TIDHA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            TIDHA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">TIDHA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidocs/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">TIDHA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">source.TIDHA</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for source.TIDHA</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span><span class="p">,</span> <span class="n">simpson</span>
+<span class="kn">from</span> <span class="nn">source.file_processing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">source.hydrodynamic_forces</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">source.pile_forces</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">source.ocean_spectra</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="solve_time_series_hydrodynamics">
+<a class="viewcode-back" href="../../apidocs/source/source.TIDHA.html#source.TIDHA.solve_time_series_hydrodynamics">[docs]</a>
+<span class="k">def</span> <span class="nf">solve_time_series_hydrodynamics</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                    <span class="n">dT</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                    <span class="n">dTeval</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                    <span class="n">Tmax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                    <span class="n">Hs</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                    <span class="n">Tp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                    <span class="n">pile_xs</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                                    <span class="n">pile_k</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                                    <span class="n">pile_m</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                                    <span class="n">damp_high_freq</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">high_freq_cutoff</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    # Solve time series analysis for hydrodynamics problem.\n</span>
+<span class="sd">    It will save output file into `[directory]\\Pontoon_TIDHA_Out.txt`. The file contains, in the form of space</span>
+<span class="sd">    separated values: Time, Wave Height, Positions array(6), Velocities array(6)\n</span>
+<span class="sd">    \n</span>
+<span class="sd">    ## Inputs\n</span>
+<span class="sd">    1. `directory`\n</span>
+<span class="sd">    The main directory for processing. It expect there to be `[directory]\\Wamit_format\\Pontoon.1` folder containing</span>
+<span class="sd">    preprocessed hydrodynamic data of the floating structure/Pontoon in Wamit format.\n</span>
+<span class="sd">    2. `dT` and `dTeval`\n</span>
+<span class="sd">    The interval for various calculations. For internal calculations, specified as `dT` and it should be less</span>
+<span class="sd">    than the highest natural frequency of the system divided by ten. Evaluation for values to be saved is based on `dTeval`.\n</span>
+<span class="sd">    3. `Hs` and `Tp`\n</span>
+<span class="sd">    Both parameters represent the sea state for the analysis.\n</span>
+<span class="sd">    4. `pile_xs`, `pile_k`, and `pile_m`\n</span>
+<span class="sd">    Respectively: pile positions array[x, y], pile stiffness matrix with shape(4, 4) that ignores u_z and r_z,</span>
+<span class="sd">    and pile mass matrix also with shape(4, 4). The stiffness and mass matrix refers to the contact point of the pile.\n</span>
+<span class="sd">    5. `damp_high_freq` and `high_freq_cutoff`\n</span>
+<span class="sd">    Optionaly damp high frequency vibrations above `high_freq_cutoff` in Hz (10 Hz by default). This functionality is </span>
+<span class="sd">    disabled by default, might be required for stiff problem.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># start timer to time the whole operation</span>
+    <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">rho_water</span><span class="p">,</span> <span class="n">Mass</span><span class="p">,</span> <span class="n">Hstiff</span><span class="p">,</span> <span class="n">Hw</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">Xbody</span><span class="p">,</span> <span class="n">CGbody</span><span class="p">,</span> <span class="n">omega_i</span><span class="p">,</span> <span class="n">A_0</span><span class="p">,</span> <span class="n">A_inf</span><span class="p">,</span> <span class="n">A_i</span><span class="p">,</span> <span class="n">B_i</span><span class="p">,</span> <span class="n">Fex_i</span> <span class="o">=</span> <span class="n">import_wamit</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\Wamit_format\Pontoon.1&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Prepare constant variables</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">9.8066</span>
+
+    <span class="c1"># times at which excitation forces are calculated</span>
+    <span class="n">exctnTime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span> <span class="o">+</span> <span class="n">dT</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+
+    <span class="c1"># times at which wave height, position, and acceleration is calculated</span>
+    <span class="n">evalTime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span> <span class="o">+</span> <span class="n">dTeval</span><span class="p">,</span> <span class="n">dTeval</span><span class="p">)</span>
+
+    <span class="c1"># Radiation Variables, see [Vessel theory: Impulse response and convolution](https://www.orcina.com/webhelp/OrcaFlex/Content/html/Vesseltheory,Impulseresponseandconvolution.htm)</span>
+
+    <span class="c1">## Number of frequency samplings</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">omega_i</span><span class="p">)</span>
+
+    <span class="c1">## Radiation Force Coefficients</span>
+    <span class="n">Trdtn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="n">omega_i</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">omega_i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">TrdtnEval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Trdtn</span> <span class="o">+</span> <span class="n">dT</span><span class="p">,</span> <span class="n">dT</span><span class="p">)</span>
+
+    <span class="c1">## Add high damping coefficient for high frequencies if specified</span>
+    <span class="k">if</span> <span class="n">damp_high_freq</span><span class="p">:</span>
+        <span class="n">B_i</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;k,ij-&gt;ijk&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">omega_i</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">high_freq_cutoff</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">B_i</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1">## Calculate IRF using inverse fourier transform</span>
+    <span class="n">IRF</span> <span class="o">=</span> <span class="n">simpson</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;lkj,ij-&gt;lkij&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">B_i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">TrdtnEval</span><span class="p">,</span> <span class="n">omega_i</span><span class="p">))),</span> <span class="n">x</span> <span class="o">=</span> <span class="n">omega_i</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+    <span class="c1">## Calculate Added Mass at infinite frequency</span>
+    <span class="n">A_i_inf</span> <span class="o">=</span> <span class="n">A_i</span> <span class="o">+</span> <span class="n">simpson</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;lkj,ij-&gt;lkij&#39;</span><span class="p">,</span> <span class="n">IRF</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">omega_i</span><span class="p">,</span><span class="n">TrdtnEval</span><span class="p">))),</span> <span class="n">x</span> <span class="o">=</span> <span class="n">TrdtnEval</span><span class="p">)</span> <span class="o">/</span> <span class="n">omega_i</span>
+    <span class="n">A_inf_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">A_i_inf</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Exciataion Variables</span>
+    <span class="n">WvHeadingIdx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">WvHeading</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="n">WvHeadingIdx</span><span class="p">]</span>
+    <span class="n">WvOmegaNum</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">WvOmega</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">Tp</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">WvOmegaNum</span><span class="p">)</span>
+    <span class="n">Wv1Seed</span> <span class="o">=</span> <span class="mi">912472194</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">Wv1Seed</span><span class="p">)</span>
+    <span class="n">phase_rand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">WvOmegaNum</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+    <span class="c1"># Pile Mass is approximated as additional mass to the pontoon    </span>
+    <span class="n">Mass</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pile_m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">pile_xs</span><span class="p">)</span>
+    <span class="n">Mass</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pile_m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">pile_xs</span><span class="p">)</span>
+
+    <span class="c1"># Excitation Force Calculations</span>
+    <span class="n">wave_spectrum</span> <span class="o">=</span> <span class="n">pierson_moskowitz_spectrum</span><span class="p">(</span><span class="n">WvOmega</span><span class="p">,</span> <span class="n">Hs</span><span class="p">,</span> <span class="n">Tp</span><span class="p">)</span>
+    <span class="n">wave_height</span> <span class="o">=</span> <span class="n">WvHeight</span><span class="p">(</span><span class="n">WvOmega</span><span class="p">,</span> <span class="n">wave_spectrum</span><span class="p">,</span> <span class="n">evalTime</span><span class="p">,</span> <span class="n">phase_rand</span><span class="p">)</span>
+    <span class="n">F_exct</span> <span class="o">=</span> <span class="n">exct_force</span><span class="p">(</span><span class="n">WvHeadingIdx</span><span class="p">,</span> <span class="n">omega_i</span><span class="p">,</span> <span class="n">WvOmega</span><span class="p">,</span> <span class="n">phase_rand</span><span class="p">,</span> <span class="n">wave_spectrum</span><span class="p">,</span> <span class="n">Fex_i</span><span class="p">,</span> <span class="n">exctnTime</span><span class="p">)</span>
+
+    <span class="c1"># Preparing Time, Position, and Velocity History for convolution calculation</span>
+    <span class="n">t_pos_vel_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">Trdtn</span><span class="o">/</span><span class="n">dT</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="mi">13</span><span class="p">))</span>
+    <span class="n">solve_ivp_dur</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">last_step_t_idx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">eom</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">solve_ivp_dur</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Extract position and velocity from state</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>   <span class="c1"># first 6 elements</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span>   <span class="c1"># next 6 elements (velocities)</span>
+     
+        <span class="c1"># Log Time, Position, and Velocity into history if time have passed interval dT</span>
+        <span class="k">if</span> <span class="n">last_step_t_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="o">/</span><span class="n">dT</span> <span class="ow">and</span> <span class="n">t_pos_vel_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">:</span>
+            <span class="n">last_step_t_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">new_t_pos_vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="n">t</span><span class="p">],</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()])</span>
+            <span class="n">new_t_pos_vel_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">t_pos_vel_history</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">new_t_pos_vel_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_t_pos_vel</span>
+            <span class="n">t_pos_vel_history</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">new_t_pos_vel_history</span>
+
+        <span class="c1"># Get Radiation Force</span>
+        <span class="n">F_rdtn</span> <span class="o">=</span> <span class="n">rdtn_force</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dT</span><span class="p">,</span> <span class="n">Trdtn</span><span class="p">,</span> <span class="n">IRF</span><span class="p">,</span> <span class="n">t_pos_vel_history</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="mi">13</span><span class="p">]])</span>
+
+        <span class="c1"># Get Excitation Force</span>
+        <span class="n">ti_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">t</span><span class="o">/</span><span class="n">dT</span><span class="p">)</span>
+        <span class="n">ti_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">t</span><span class="o">/</span><span class="n">dT</span><span class="p">)</span>
+        <span class="n">F_exct_current</span> <span class="o">=</span> <span class="p">(</span><span class="n">F_exct</span><span class="p">[:,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ti_1</span><span class="p">)]</span> <span class="o">-</span> <span class="n">F_exct</span><span class="p">[:,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ti_0</span><span class="p">)])</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">%</span><span class="n">dT</span><span class="p">)</span><span class="o">/</span><span class="n">dT</span> <span class="o">+</span> <span class="n">F_exct</span><span class="p">[:,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ti_0</span><span class="p">)]</span>
+
+        <span class="c1"># Get Pile Force</span>
+        <span class="n">F_pile</span> <span class="o">=</span> <span class="n">pile_react_force</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">Xbody</span><span class="p">,</span> <span class="n">pile_xs</span><span class="p">,</span> <span class="n">pile_k</span><span class="p">)</span>
+
+        <span class="c1"># Define equation of motion (Mass * acc = Forces - Hstiff * pos) to get the acceleration</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">Mass</span> <span class="o">+</span> <span class="n">A_inf_new</span><span class="p">,</span> <span class="n">F_rdtn</span> <span class="o">+</span> <span class="n">F_exct_current</span> <span class="o">-</span> <span class="n">F_pile</span> <span class="o">-</span> <span class="n">Hstiff</span> <span class="o">@</span> <span class="n">pos</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vel</span><span class="p">,</span> <span class="n">acc</span><span class="p">])</span>
+
+    <span class="c1"># Solve the equation of motion using scipy&#39;s solve_ivp</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">eom</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;RK45&#39;</span><span class="p">,</span> <span class="n">t_eval</span> <span class="o">=</span> <span class="n">evalTime</span><span class="p">)</span><span class="c1">#, rtol=1e-3, atol=1e-3)</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;\Pontoon_TIDHA_Out.txt&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">wave_height</span><span class="p">)],</span> <span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">tend</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Time : </span><span class="si">{</span><span class="p">(</span><span class="n">tend</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tstart</span><span class="w"> </span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, nedisy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
