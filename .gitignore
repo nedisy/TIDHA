@@ -1,0 +1,9 @@
+*.cfg
+__pycache__/
+Include/
+Lib/
+playground/
+Scripts/
+share/
+docs/
+.github/
