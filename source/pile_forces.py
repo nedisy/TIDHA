@@ -12,7 +12,7 @@ def get_pile_disp(x_t: NDArray[np.float64], r: NDArray[np.float64]) -> NDArray[n
     2. `r`: vector from rigid body center of rotation to the point, (float 2) m\n
     \n
     ## Return\n
-    Return the coordinate of the displaced point\n
+    Returns the coordinate of the displaced point\n
     '''
     u = np.zeros(6)
     u[0] += x_t[0] -(1 - np.cos(x_t[4]))*r[0] -x_t[5]*r[1]
