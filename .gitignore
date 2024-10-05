@@ -5,5 +5,4 @@ Lib/
 playground/
 Scripts/
 share/
-docs/
-!docs/_build/html
+docs/_build/

@@ -1,8 +1,6 @@
 # TIDHA
 **Time Domain Hydrodynamic Analysis**
 
-See the [documentation](https://nedisy.github.io/TIDHA/).
-
 ## Background
 This project is created mainly to make a python code for hydrodynamic analysis. Most codes I found that works with hydrodynamic analysis use Fortran which I don't understand.
 
