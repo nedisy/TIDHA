@@ -98,7 +98,8 @@
 <table class="autosummary longtable docutils align-left">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#source.hydrodynamic_forces.rdtn_force" title="source.hydrodynamic_forces.rdtn_force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rdtn_force</span></code></a></p></td>
-<td></td>
+<td><p class="rubric" id="compute-radiation-force">Compute Radiation force</p>
+</td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#source.hydrodynamic_forces.exct_force" title="source.hydrodynamic_forces.exct_force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exct_force</span></code></a></p></td>
 <td><p class="rubric" id="compute-total-excitation-force-at-time-t">Compute total excitation force at time t</p>
@@ -112,16 +113,26 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source.hydrodynamic_forces.rdtn_force">
 <span class="sig-prename descclassname"><span class="pre">source.hydrodynamic_forces.</span></span><span class="sig-name descname"><span class="pre">rdtn_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dT</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Trdtn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_vel_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/source/hydrodynamic_forces.html#rdtn_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source.hydrodynamic_forces.rdtn_force" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p class="rubric" id="id3">Compute Radiation force</p>
+<p>The formula used based on <a class="reference external" href="https://www.orcina.com/webhelp/OrcaFlex/Content/html/Vesseltheory,Impulseresponseandconvolution.htm">Vessel theory: Impulse response and convolution</a></p>
+<p class="rubric" id="id4">Input</p>
+<p><code class="docutils literal notranslate"><span class="pre">t</span></code>: current time, (s)</p>
+<p><code class="docutils literal notranslate"><span class="pre">dT</span></code>: radiation time interval, (s)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Trdtn</span></code>: maximum radiation time by inverse fourier transform, (s)</p>
+<p><code class="docutils literal notranslate"><span class="pre">IRF</span></code>: Impulse Response Function, inverse fourier transform of B, [3 x (N/m), 3 x (Nm/m)] x <code class="docutils literal notranslate"><span class="pre">Trdtn/dT</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">t_vel_history</span></code>: times and velocities up to min(<code class="docutils literal notranslate"><span class="pre">t</span></code>, <code class="docutils literal notranslate"><span class="pre">Trdtn/2</span></code>), [(s), (m/s) x 3] x N_history</p>
+<p class="rubric" id="id5">Returns</p>
+<p>result: array(6)</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source.hydrodynamic_forces.exct_force">
 <span class="sig-prename descclassname"><span class="pre">source.hydrodynamic_forces.</span></span><span class="sig-name descname"><span class="pre">exct_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">WvHeadingIdx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_rand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.complex128</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exctnTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.complex128</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/source/hydrodynamic_forces.html#exct_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source.hydrodynamic_forces.exct_force" title="Link to this definition"></a></dt>
-<dd><p class="rubric" id="id1">Compute total excitation force at time t</p>
+<dd><p class="rubric" id="id6">Compute total excitation force at time t</p>
 <p>The excitation force doesn’t consider vessel dispalcement and only considers wave height. The formula for the force
 follows reference format from <a class="reference external" href="https://www.wamit.com/manualv7.4/wamit_v74manualch3.html">Wamit Manual</a>. The wave
 height calculated based on <a class="reference external" href="https://www.tandfonline.com/doi/full/10.1080/20464177.2023.2197280">Tabesphour (2023)</a>.</p>
-<p class="rubric" id="id2">Input</p>
+<p class="rubric" id="id7">Input</p>
 <p><code class="docutils literal notranslate"><span class="pre">WvHeadingIdx</span></code>: Correspond to the index of wave heading of <code class="docutils literal notranslate"><span class="pre">Fex</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">omega_i</span></code>: Angular frequencies from Wamit file, (float N_omega_i) (rad/s)</p>
 <p><code class="docutils literal notranslate"><span class="pre">omega</span></code>: Angular frequencies to be evaluated, (float N_omega) (rad/s)</p>
@@ -129,6 +140,8 @@ height calculated based on <a class="reference external" href="https://www.tandf
 <p><code class="docutils literal notranslate"><span class="pre">spectrum</span></code>: Wave spectrum, (float N_omega) (m^2 s)</p>
 <p><code class="docutils literal notranslate"><span class="pre">Fex</span></code>: Complex hydrodynamic excitation coefficient, (float N_omega_i) (N/m)</p>
 <p><code class="docutils literal notranslate"><span class="pre">exctnTime</span></code>: Time at which exciation time is calculated,(float N_exctnTime) (s)</p>
+<p class="rubric" id="id8">Returns</p>
+<p>Excitation force over time</p>
 </dd></dl>
 
 </section>

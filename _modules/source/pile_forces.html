@@ -88,7 +88,7 @@
 <span class="sd">    2. `r`: vector from rigid body center of rotation to the point, (float 2) m\n</span>
 <span class="sd">    \n</span>
 <span class="sd">    ## Return\n</span>
-<span class="sd">    Return the coordinate of the displaced point\n</span>
+<span class="sd">    Returns the coordinate of the displaced point\n</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
     <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">x_t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_t</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span><span class="o">*</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="n">x_t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">*</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
