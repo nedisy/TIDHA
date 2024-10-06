@@ -8,7 +8,6 @@ def rdtn_force(t: float,
                IRF: NDArray[np.float64],
                t_vel_history: NDArray[np.float64]
                ) -> NDArray[np.float64]:
-    import time as tm
     """
     # Compute Radiation force\n
     \n
@@ -62,6 +61,8 @@ def exct_force(WvHeadingIdx: int,
     `spectrum`: Wave spectrum, (float N_omega) (m^2 s)\n
     `Fex`: Complex hydrodynamic excitation coefficient, (float N_omega_i) (N/m)\n
     `exctnTime`: Time at which exciation time is calculated,(float N_exctnTime) (s)
+    ## Returns
+    Excitation force over time
     """
     # Total force as the sum of forces over all frequencies
     total_forces = np.zeros((6,len(exctnTime)), dtype=np.complex128)
