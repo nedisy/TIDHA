@@ -52,6 +52,8 @@
 <li class="toctree-l1"><a class="reference internal" href="vessel_motion_theory.html">Vessel Motion Theory</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Linear Pile Force Theory</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#two-dimensional-single-pile">Two Dimensional Single Pile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#three-dimensional-single-pile">Three Dimensional Single Pile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-pile-system">Multi-Pile System</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="apidocs/index.html">API Reference</a></li>
@@ -86,86 +88,103 @@
 <p><strong>The Theoretical Background Behind Pile Force Calculation</strong></p>
 <section id="two-dimensional-single-pile">
 <h2>Two Dimensional Single Pile<a class="headerlink" href="#two-dimensional-single-pile" title="Link to this heading"></a></h2>
-<p>The two dimensional pile analysis is conducted using OpenPile that gives displacement result for a given force. By varying the lateral and moment force, ones can obtain inverted stiffness value, that is:
-$$</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d8b8289d-8083-4385-9ceb-c6734ae1b096">
-<span class="eqno">(1)<a class="headerlink" href="#equation-d8b8289d-8083-4385-9ceb-c6734ae1b096" title="Permalink to this equation"></a></span>\[\begin{align}
+<p>The two dimensional pile analysis is conducted using OpenPile that gives displacement result for a given force. By varying the lateral and moment force, ones can obtain inverted stiffness value, that is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
 u_x &amp;= \left(m_{uxfx}\right) \cdot F_x + \left(m_{uxmy}\right) \cdot M_y \\
 r_y &amp;= \left(m_{ryfx}\right) \cdot F_x + \left(m_{rymy}\right) \cdot M_y\\
-\end{align}\]</div>
+\end{align}
+\end{split}\]</div>
+<p>This form is useful to be used in the next step, constructing 3d individual pile stiffness matrix.</p>
+</section>
+<section id="three-dimensional-single-pile">
+<h2>Three Dimensional Single Pile<a class="headerlink" href="#three-dimensional-single-pile" title="Link to this heading"></a></h2>
+<p>To continue the force calculation at the third dimension, ones only have to include the effect of lateral force x, y and moment x, y. The force z and moment z is not restrained by any individual pile. Thus following equation holds:</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}This form is useful to be used in the next step, constructing 3d individual pile stiffness matrix.\\## Three Dimensional Single Pile
-To continue the force calculation at the third dimension, ones only have to include the effect of lateral force x, y and moment x, y. The force z and moment z is not restrained by any individual pile. Thus following equation holds:
-\end{aligned}\end{align} \]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-8c06809c-6851-46f6-9841-3f3c5ec7416e">
-<span class="eqno">(2)<a class="headerlink" href="#equation-8c06809c-6851-46f6-9841-3f3c5ec7416e" title="Permalink to this equation"></a></span>\[\begin{equation}
+\[\begin{split}
 \begin{bmatrix}
 u_x\\
 u_y\\
 r_x\\
 r_y
 \end{bmatrix}
-
 =
-
 \begin{bmatrix}
 m_{uxfx} &amp; 0 &amp; 0 &amp; m_{uxmy}\\
 0 &amp; m_{uyfy} &amp; -m_{uymx} &amp; 0\\
 0 &amp; -m_{rxfy} &amp; m_{rxmx} &amp; 0\\
 m_{ryfx} &amp; 0 &amp; 0 &amp; m_{rymy}
 \end{bmatrix}
-
 \begin{bmatrix}
 f_x\\
 f_y\\
 m_x\\
 m_y
 \end{bmatrix}
-\end{equation}\]</div>
-<div class="math notranslate nohighlight">
-\[or if we simplify the notation:\]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-9118cb13-4436-4a49-b76f-cd052c2f2601">
-<span class="eqno">(3)<a class="headerlink" href="#equation-9118cb13-4436-4a49-b76f-cd052c2f2601" title="Permalink to this equation"></a></span>\[\begin{equation}
-\vec{u} = \bold{m}\vec{f}
-\end{equation}\]</div>
-<div class="math notranslate nohighlight">
-\[We know the expression for stiffness:\]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-a9b29d0b-4a41-40e2-b477-e9e4c77ce1fd">
-<span class="eqno">(4)<a class="headerlink" href="#equation-a9b29d0b-4a41-40e2-b477-e9e4c77ce1fd" title="Permalink to this equation"></a></span>\[\begin{equation}
-\vec{f} = \bold{k}\vec{u}
-\end{equation}\]</div>
-<div class="math notranslate nohighlight">
-\[Thus we can get stiffness matrix by:\]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-6aaab958-2168-4789-802a-1ab30efe4ebb">
-<span class="eqno">(5)<a class="headerlink" href="#equation-6aaab958-2168-4789-802a-1ab30efe4ebb" title="Permalink to this equation"></a></span>\[\begin{align}
-\vec{u}           &amp;= \bold{m}\bold{k}\vec{u} \notag\\
-\bold{m}\bold{k}  &amp;= \bold{I} \notag\\
-\bold{k}          &amp;= \bold{m}^{-1}
-\end{align}\]</div>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}
-## Multi-Pile System
-After the 3D stiffness matrix is obtained, we then can proceed to calculate the total effect of the multi-pile system. There are two steps in calculating the pile force:\\1. Calcualte Pile Displacement\\The first step that is finding the dispalcement in each of pile reaction location is needed to get individiual pile force. The displacement is obtained through 3D rigid body transformation:\end{aligned}\end{align} \]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-d582b6b3-4a22-4ee3-854c-fb16870465b2">
-<span class="eqno">(6)<a class="headerlink" href="#equation-d582b6b3-4a22-4ee3-854c-fb16870465b2" title="Permalink to this equation"></a></span>\[\begin{equation}
-\vec{u}_{pile,i} (t) = \bold{R}_{pontoon}(t)\vec{r}_{pile,i} + \vec{u}_{pontoon}(t) - \vec{r}_{pile,i}
-\end{equation}\]</div>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}Where:\\ - $\vec{r}_{pile,i}$ is undispalced pile coordinate\\ - $\vec{u}_{pile,i}(t)$ is pile displacement at time $t$\\ - $\vec{u}_{pontoon}(t)$ is pontoon displacement at time $t$\\ - $\bold{R}_{pontoon}(t)$ is the rotation matrix of the ponton at time $t$\\
-2. Calculate Pile Reaction\\Pile reaction is calculated based on the total of force vectors from individual pile and from the moment components. The moments arise from the nature of the force that is of non-coplanar and non-concurrent. The moment is calculated assuming center of rotation the same as the center rotation used to calculate pontoon mass and moment of inertia.\end{aligned}\end{align} \]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-68dfbea2-fc96-4cd5-a105-ff0d70ec59b3">
-<span class="eqno">(7)<a class="headerlink" href="#equation-68dfbea2-fc96-4cd5-a105-ff0d70ec59b3" title="Permalink to this equation"></a></span>\[\begin{align}
-\vec{f}_{pile,i}(t) &amp;= \bold{k}\vec{u}_{pile,i}(t)\\
-\vec{f}_{pile}(t) &amp;= \sum_{i=1}^{n_{pile}} \left(\vec{f}_{pile,i}(t)  + \right(\vec{r}_{pile,i} + \vec{u}_{pile,i}(t)\left) \times \vec{f}_{pile,i}(t)\right)
-\end{align}\]</div>
+\end{split}\]</div>
+<p>or if we simplify the notation:</p>
 <div class="math notranslate nohighlight">
 \[
-Thus with the function $\vec{f}_{pile}(t)$ as pile reaction, we finally can use it in the pontoon equation of motion.\]</div>
-<div class="amsmath math notranslate nohighlight" id="equation-7a3362db-c290-4d15-8d0a-7659ff0c7dd1">
-<span class="eqno">(8)<a class="headerlink" href="#equation-7a3362db-c290-4d15-8d0a-7659ff0c7dd1" title="Permalink to this equation"></a></span>\[\begin{equation}
-\left(\bold{M} + \bold{A}_{\infty}\right)\vec{a}_{pontoon}(t) = -\bold{k}_{hydrostatic} \vec{u}_{pontoon}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
-\end{equation}\]</div>
-<p>$$</p>
+\begin{equation}
+\vec{u} = \textbf{m}\vec{f}
+\end{equation}
+\]</div>
+<p>We know the expression for stiffness:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\vec{f} = \textbf{k}\vec{u}
+\end{equation}
+\]</div>
+<p>Thus we can get stiffness matrix by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\vec{u}           &amp;= \textbf{m}\textbf{k}\vec{u} \notag\\
+\textbf{m}\textbf{k}  &amp;= \textbf{I} \notag\\
+\textbf{k}          &amp;= \textbf{m}^{-1}
+\end{align}
+\end{split}\]</div>
+</section>
+<section id="multi-pile-system">
+<h2>Multi-Pile System<a class="headerlink" href="#multi-pile-system" title="Link to this heading"></a></h2>
+<p>After the 3D stiffness matrix is obtained, we then can proceed to calculate the total effect of the multi-pile system. There are two steps in calculating the pile force:</p>
+<ol class="arabic simple">
+<li><p>Calcualte Pile Displacement</p></li>
+</ol>
+<p>The first step that is finding the dispalcement in each of pile reaction location is needed to get individiual pile force. The displacement is obtained through 3D rigid body transformation:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\vec{u}_{pile,i} (t) = \textbf{R}_{pontoon}(t)\vec{r}_{pile,i} + \vec{u}_{pontoon}(t) - \vec{r}_{pile,i}
+\end{equation}
+\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\vec{r}_{pile,i}\)</span> is undispalced pile coordinate</p></li>
+<li><p><span class="math notranslate nohighlight">\(\vec{u}_{pile,i}(t)\)</span> is pile displacement at time <span class="math notranslate nohighlight">\(t\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\vec{u}_{pontoon}(t)\)</span> is pontoon displacement at time <span class="math notranslate nohighlight">\(t\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\textbf{R}_{pontoon}(t)\)</span> is the rotation matrix of the ponton at time <span class="math notranslate nohighlight">\(t\)</span></p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Calculate Pile Reaction</p></li>
+</ol>
+<p>Pile reaction is calculated based on the total of force vectors from individual pile and from the moment components. The moments arise from the nature of the force that is of non-coplanar and non-concurrent. The moment is calculated assuming center of rotation the same as the center rotation used to calculate pontoon mass and moment of inertia.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\vec{f}_{pile,i}(t) &amp;= \textbf{k}\vec{u}_{pile,i}(t)\\
+\vec{f}_{pile}(t) &amp;= \sum_{i=1}^{n_{pile}} \left(\vec{f}_{pile,i}(t)  + \right(\vec{r}_{pile,i} + \vec{u}_{pile,i}(t)\left) \times \vec{f}_{pile,i}(t)\right)
+\end{align}
+\end{split}\]</div>
+<p>Thus with the function <span class="math notranslate nohighlight">\(\vec{f}_{pile}(t)\)</span> as pile reaction, we finally can use it in the pontoon equation of motion.</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\left(\textbf{M} + \textbf{A}_{\infty}\right)\vec{a}_{pontoon}(t) = -\textbf{k}_{hydrostatic} \vec{u}_{pontoon}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
+\end{equation}
+\]</div>
 </section>
 </section>
 
