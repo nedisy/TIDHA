@@ -29,7 +29,7 @@ def pile_react_force(x_t: NDArray[np.float64], Xbody: NDArray[np.float64], pile_
     # Get the total pile reaction\n
     \n
     Pile force is calculated from assumed linear properties of the pile and pile displacements. The total body force includes non-coplanar
-    forces that cause moment the the rigid body.s\n
+    forces that cause moment the the rigid body. See [Linear Pile Force Thoery](../../linear_pile_force_theory.md) for more detailed information.\n
     \n
     ## Input\n
     1. `x_t`: rigid body 6-dof generalized position at time t, [3 x (m), 3 x (rad)]\n
