@@ -86,11 +86,12 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="vessel-motion-theory">
 <h1>Vessel Motion Theory<a class="headerlink" href="#vessel-motion-theory" title="Link to this heading"></a></h1>
-<p>Vessel movement, like any other classical movement follows newton’s second law of motion. The most basic form of the equation together with Hooke’s Law and a damping coefficient <span class="math notranslate nohighlight">\(b\)</span>:
-$<span class="math notranslate nohighlight">\(
+<p>Vessel movement, like any other classical movement follows newton’s second law of motion. The most basic form of the equation together with Hooke’s Law and a damping coefficient <span class="math notranslate nohighlight">\(b\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
 m\ddot{x} + b\dot{x} + kx = f
-\)</span>$</p>
-<p>If we expand the equation for 6 degree of freedom generalized motion <span class="math notranslate nohighlight">\(\vec{x}, \vec{\dot{x}}, \vec{\ddot{x}}\)</span> and force <span class="math notranslate nohighlight">\(\vec{f}\)</span>, we then get mass matrix, damping matrix, and stiffness matrix <span class="math notranslate nohighlight">\(\bold{m}, \bold{b}, \bold{k}\)</span> respectively.</p>
+\]</div>
+<p>If we expand the equation for 6 degree of freedom generalized motion <span class="math notranslate nohighlight">\(\vec{x}, \vec{\dot{x}}, \vec{\ddot{x}}\)</span> and force <span class="math notranslate nohighlight">\(\vec{f}\)</span>, we then get mass matrix, damping matrix, and stiffness matrix <span class="math notranslate nohighlight">\(\textbf{m}, \textbf{b}, \textbf{k}\)</span> respectively.</p>
 <section id="added-mass-and-radiation-damping-force">
 <h2>Added Mass and Radiation Damping Force<a class="headerlink" href="#added-mass-and-radiation-damping-force" title="Link to this heading"></a></h2>
 <p>For the specific application of this solver, we have to modify the damping term <span class="math notranslate nohighlight">\(b\dot{x}\)</span>. The damping of the vessel motion depends on the frequency and velocity. Thus we cannot just have independent damping matrix. We have to calculate damping force by inverse fourier transform and convolve it with past velocity of the vessel. This will effectively give the correct frequency dependant damping force. See the API Reference on the hydrodynamic force for more detail.</p>
@@ -106,13 +107,13 @@ m\ddot{x} + b\dot{x} + kx = f
 </section>
 <section id="vessel-equation-of-motion">
 <h2>Vessel Equation of Motion<a class="headerlink" href="#vessel-equation-of-motion" title="Link to this heading"></a></h2>
-<p>After we state every component of the motion equation, we then can assemble the equation:
-$$</p>
-<div class="amsmath math notranslate nohighlight" id="equation-728169a4-2652-4c02-878a-23c16484b103">
-<span class="eqno">(1)<a class="headerlink" href="#equation-728169a4-2652-4c02-878a-23c16484b103" title="Permalink to this equation"></a></span>\[\begin{equation}
-\left(\bold{M} + \bold{A}_{\infty}\right)\vec{a}(t) = -\bold{k}_{hydrostatic} \vec{u}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
-\end{equation}\]</div>
-<p>$$</p>
+<p>After we state every component of the motion equation, we then can assemble the equation:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\left(\textbf{M} + \textbf{A}_{\infty}\right)\vec{a}(t) = -\textbf{k}_{hydrostatic} \vec{u}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
+\end{equation}
+\]</div>
 <p>with:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\vec{a}\)</span> as the vessel acceleration</p></li>

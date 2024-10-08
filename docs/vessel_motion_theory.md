@@ -1,10 +1,11 @@
 # Vessel Motion Theory
 Vessel movement, like any other classical movement follows newton's second law of motion. The most basic form of the equation together with Hooke's Law and a damping coefficient $b$:
+
 $$
 m\ddot{x} + b\dot{x} + kx = f
 $$
 
-If we expand the equation for 6 degree of freedom generalized motion $\vec{x}, \vec{\dot{x}}, \vec{\ddot{x}}$ and force $\vec{f}$, we then get mass matrix, damping matrix, and stiffness matrix $\bold{m}, \bold{b}, \bold{k}$ respectively.
+If we expand the equation for 6 degree of freedom generalized motion $\vec{x}, \vec{\dot{x}}, \vec{\ddot{x}}$ and force $\vec{f}$, we then get mass matrix, damping matrix, and stiffness matrix $\textbf{m}, \textbf{b}, \textbf{k}$ respectively.
 
 ## Added Mass and Radiation Damping Force
 For the specific application of this solver, we have to modify the damping term $b\dot{x}$. The damping of the vessel motion depends on the frequency and velocity. Thus we cannot just have independent damping matrix. We have to calculate damping force by inverse fourier transform and convolve it with past velocity of the vessel. This will effectively give the correct frequency dependant damping force. See the API Reference on the hydrodynamic force for more detail.
@@ -19,9 +20,10 @@ The right hand side of the equation of motion is the excitation force. The excia
 
 ## Vessel Equation of Motion
 After we state every component of the motion equation, we then can assemble the equation:
+
 $$
 \begin{equation}
-\left(\bold{M} + \bold{A}_{\infty}\right)\vec{a}(t) = -\bold{k}_{hydrostatic} \vec{u}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
+\left(\textbf{M} + \textbf{A}_{\infty}\right)\vec{a}(t) = -\textbf{k}_{hydrostatic} \vec{u}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
 \end{equation}
 $$
 
