@@ -50,3 +50,6 @@ def pile_react_force(x_t: NDArray[np.float64], Xbody: NDArray[np.float64], pile_
         reaction[3:] += np.cross(np.concatenate([r,[0]]) + u[:3], np.concatenate([F_pile[:2], [0]])) # Rigid Body Moment Force
     
     return reaction
+
+
+# TODO pile_react_force_nonlinear(x_t, Xbody, pile_xs, pile_k) with pile_k as nonlinear stiffness
