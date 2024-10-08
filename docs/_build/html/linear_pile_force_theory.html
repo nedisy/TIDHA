@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linear Pile Force Theory &mdash; TIDHA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="apidocs/index.html" />
+    <link rel="prev" title="Vessel Motion Theory" href="vessel_motion_theory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TIDHA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">TIDHA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vessel_motion_theory.html">Vessel Motion Theory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Linear Pile Force Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#two-dimensional-single-pile">Two Dimensional Single Pile</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TIDHA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Linear Pile Force Theory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/linear_pile_force_theory.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-pile-force-theory">
+<h1>Linear Pile Force Theory<a class="headerlink" href="#linear-pile-force-theory" title="Link to this heading"></a></h1>
+<p><strong>The Theoretical Background Behind Pile Force Calculation</strong></p>
+<section id="two-dimensional-single-pile">
+<h2>Two Dimensional Single Pile<a class="headerlink" href="#two-dimensional-single-pile" title="Link to this heading"></a></h2>
+<p>The two dimensional pile analysis is conducted using OpenPile that gives displacement result for a given force. By varying the lateral and moment force, ones can obtain inverted stiffness value, that is:
+$$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-d8b8289d-8083-4385-9ceb-c6734ae1b096">
+<span class="eqno">(1)<a class="headerlink" href="#equation-d8b8289d-8083-4385-9ceb-c6734ae1b096" title="Permalink to this equation"></a></span>\[\begin{align}
+u_x &amp;= \left(m_{uxfx}\right) \cdot F_x + \left(m_{uxmy}\right) \cdot M_y \\
+r_y &amp;= \left(m_{ryfx}\right) \cdot F_x + \left(m_{rymy}\right) \cdot M_y\\
+\end{align}\]</div>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}This form is useful to be used in the next step, constructing 3d individual pile stiffness matrix.\\## Three Dimensional Single Pile
+To continue the force calculation at the third dimension, ones only have to include the effect of lateral force x, y and moment x, y. The force z and moment z is not restrained by any individual pile. Thus following equation holds:
+\end{aligned}\end{align} \]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-8c06809c-6851-46f6-9841-3f3c5ec7416e">
+<span class="eqno">(2)<a class="headerlink" href="#equation-8c06809c-6851-46f6-9841-3f3c5ec7416e" title="Permalink to this equation"></a></span>\[\begin{equation}
+\begin{bmatrix}
+u_x\\
+u_y\\
+r_x\\
+r_y
+\end{bmatrix}
+
+=
+
+\begin{bmatrix}
+m_{uxfx} &amp; 0 &amp; 0 &amp; m_{uxmy}\\
+0 &amp; m_{uyfy} &amp; -m_{uymx} &amp; 0\\
+0 &amp; -m_{rxfy} &amp; m_{rxmx} &amp; 0\\
+m_{ryfx} &amp; 0 &amp; 0 &amp; m_{rymy}
+\end{bmatrix}
+
+\begin{bmatrix}
+f_x\\
+f_y\\
+m_x\\
+m_y
+\end{bmatrix}
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[or if we simplify the notation:\]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-9118cb13-4436-4a49-b76f-cd052c2f2601">
+<span class="eqno">(3)<a class="headerlink" href="#equation-9118cb13-4436-4a49-b76f-cd052c2f2601" title="Permalink to this equation"></a></span>\[\begin{equation}
+\vec{u} = \bold{m}\vec{f}
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[We know the expression for stiffness:\]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-a9b29d0b-4a41-40e2-b477-e9e4c77ce1fd">
+<span class="eqno">(4)<a class="headerlink" href="#equation-a9b29d0b-4a41-40e2-b477-e9e4c77ce1fd" title="Permalink to this equation"></a></span>\[\begin{equation}
+\vec{f} = \bold{k}\vec{u}
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[Thus we can get stiffness matrix by:\]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-6aaab958-2168-4789-802a-1ab30efe4ebb">
+<span class="eqno">(5)<a class="headerlink" href="#equation-6aaab958-2168-4789-802a-1ab30efe4ebb" title="Permalink to this equation"></a></span>\[\begin{align}
+\vec{u}           &amp;= \bold{m}\bold{k}\vec{u} \notag\\
+\bold{m}\bold{k}  &amp;= \bold{I} \notag\\
+\bold{k}          &amp;= \bold{m}^{-1}
+\end{align}\]</div>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}
+## Multi-Pile System
+After the 3D stiffness matrix is obtained, we then can proceed to calculate the total effect of the multi-pile system. There are two steps in calculating the pile force:\\1. Calcualte Pile Displacement\\The first step that is finding the dispalcement in each of pile reaction location is needed to get individiual pile force. The displacement is obtained through 3D rigid body transformation:\end{aligned}\end{align} \]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-d582b6b3-4a22-4ee3-854c-fb16870465b2">
+<span class="eqno">(6)<a class="headerlink" href="#equation-d582b6b3-4a22-4ee3-854c-fb16870465b2" title="Permalink to this equation"></a></span>\[\begin{equation}
+\vec{u}_{pile,i} (t) = \bold{R}_{pontoon}(t)\vec{r}_{pile,i} + \vec{u}_{pontoon}(t) - \vec{r}_{pile,i}
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}Where:\\ - $\vec{r}_{pile,i}$ is undispalced pile coordinate\\ - $\vec{u}_{pile,i}(t)$ is pile displacement at time $t$\\ - $\vec{u}_{pontoon}(t)$ is pontoon displacement at time $t$\\ - $\bold{R}_{pontoon}(t)$ is the rotation matrix of the ponton at time $t$\\
+2. Calculate Pile Reaction\\Pile reaction is calculated based on the total of force vectors from individual pile and from the moment components. The moments arise from the nature of the force that is of non-coplanar and non-concurrent. The moment is calculated assuming center of rotation the same as the center rotation used to calculate pontoon mass and moment of inertia.\end{aligned}\end{align} \]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-68dfbea2-fc96-4cd5-a105-ff0d70ec59b3">
+<span class="eqno">(7)<a class="headerlink" href="#equation-68dfbea2-fc96-4cd5-a105-ff0d70ec59b3" title="Permalink to this equation"></a></span>\[\begin{align}
+\vec{f}_{pile,i}(t) &amp;= \bold{k}\vec{u}_{pile,i}(t)\\
+\vec{f}_{pile}(t) &amp;= \sum_{i=1}^{n_{pile}} \left(\vec{f}_{pile,i}(t)  + \right(\vec{r}_{pile,i} + \vec{u}_{pile,i}(t)\left) \times \vec{f}_{pile,i}(t)\right)
+\end{align}\]</div>
+<div class="math notranslate nohighlight">
+\[
+Thus with the function $\vec{f}_{pile}(t)$ as pile reaction, we finally can use it in the pontoon equation of motion.\]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-7a3362db-c290-4d15-8d0a-7659ff0c7dd1">
+<span class="eqno">(8)<a class="headerlink" href="#equation-7a3362db-c290-4d15-8d0a-7659ff0c7dd1" title="Permalink to this equation"></a></span>\[\begin{equation}
+\left(\bold{M} + \bold{A}_{\infty}\right)\vec{a}_{pontoon}(t) = -\bold{k}_{hydrostatic} \vec{u}_{pontoon}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
+\end{equation}\]</div>
+<p>$$</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vessel_motion_theory.html" class="btn btn-neutral float-left" title="Vessel Motion Theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="apidocs/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, nedisy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

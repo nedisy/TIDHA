@@ -9,5 +9,7 @@ TIDHA documentation
    :caption: Contents:
 
    intro
+   vessel_motion_theory
+   linear_pile_force_theory
    apidocs/index
 

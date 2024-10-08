@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vessel Motion Theory &mdash; TIDHA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Linear Pile Force Theory" href="linear_pile_force_theory.html" />
+    <link rel="prev" title="TIDHA" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TIDHA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">TIDHA</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vessel Motion Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#added-mass-and-radiation-damping-force">Added Mass and Radiation Damping Force</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#restoring-force">Restoring Force</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#excitation-force">Excitation Force</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vessel-equation-of-motion">Vessel Equation of Motion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="linear_pile_force_theory.html">Linear Pile Force Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TIDHA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Vessel Motion Theory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/vessel_motion_theory.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="vessel-motion-theory">
+<h1>Vessel Motion Theory<a class="headerlink" href="#vessel-motion-theory" title="Link to this heading"></a></h1>
+<p>Vessel movement, like any other classical movement follows newton’s second law of motion. The most basic form of the equation together with Hooke’s Law and a damping coefficient <span class="math notranslate nohighlight">\(b\)</span>:
+$<span class="math notranslate nohighlight">\(
+m\ddot{x} + b\dot{x} + kx = f
+\)</span>$</p>
+<p>If we expand the equation for 6 degree of freedom generalized motion <span class="math notranslate nohighlight">\(\vec{x}, \vec{\dot{x}}, \vec{\ddot{x}}\)</span> and force <span class="math notranslate nohighlight">\(\vec{f}\)</span>, we then get mass matrix, damping matrix, and stiffness matrix <span class="math notranslate nohighlight">\(\bold{m}, \bold{b}, \bold{k}\)</span> respectively.</p>
+<section id="added-mass-and-radiation-damping-force">
+<h2>Added Mass and Radiation Damping Force<a class="headerlink" href="#added-mass-and-radiation-damping-force" title="Link to this heading"></a></h2>
+<p>For the specific application of this solver, we have to modify the damping term <span class="math notranslate nohighlight">\(b\dot{x}\)</span>. The damping of the vessel motion depends on the frequency and velocity. Thus we cannot just have independent damping matrix. We have to calculate damping force by inverse fourier transform and convolve it with past velocity of the vessel. This will effectively give the correct frequency dependant damping force. See the API Reference on the hydrodynamic force for more detail.</p>
+<p>The other thing to metion is that because of the effect of radiation force, the system will act as it have some added mass. The added mass can be calculated using the same reference as the radiation damping force.</p>
+</section>
+<section id="restoring-force">
+<h2>Restoring Force<a class="headerlink" href="#restoring-force" title="Link to this heading"></a></h2>
+<p>The Hooke’s law is one of the example of a restoring force. Hooke’s law itsel is a linear force. In the specific condition for this solver, the stiffness matrix is provided by the hydrostatic stiffness matrix. It arise from the fact that a stable floating structure resist heave, roll, and pitch displacement. The other restoring force in this solver is pile force. A vessel anchored to piles will resist surge, sway, roll, pitch, and yaw movement. The pile force is a nonlinear force, thus cannot be represented as Hooke’s law. The form it will take is a velocity dependant force. See <a class="reference internal" href="linear_pile_force_theory.html"><span class="std std-doc">Linear Pile Force Thoery</span></a> for more detailed information of the linearized pile stiffness case. Nonlinear pile reaction will be created eventually.</p>
+</section>
+<section id="excitation-force">
+<h2>Excitation Force<a class="headerlink" href="#excitation-force" title="Link to this heading"></a></h2>
+<p>The right hand side of the equation of motion is the excitation force. The exciatation force excites vessel into motion. Without the excitation force, the vessel would eventually be motionless due to the damping force. In this solver, the excitation force is calulated using vessels’ excitation force response that is frequency dependant. For more detailed calculation see the API Reference for the hydrodynamic forces.</p>
+</section>
+<section id="vessel-equation-of-motion">
+<h2>Vessel Equation of Motion<a class="headerlink" href="#vessel-equation-of-motion" title="Link to this heading"></a></h2>
+<p>After we state every component of the motion equation, we then can assemble the equation:
+$$</p>
+<div class="amsmath math notranslate nohighlight" id="equation-728169a4-2652-4c02-878a-23c16484b103">
+<span class="eqno">(1)<a class="headerlink" href="#equation-728169a4-2652-4c02-878a-23c16484b103" title="Permalink to this equation"></a></span>\[\begin{equation}
+\left(\bold{M} + \bold{A}_{\infty}\right)\vec{a}(t) = -\bold{k}_{hydrostatic} \vec{u}(t) + \vec{f}_{pile}(t) + \vec{f}_{radiation}(t) + \vec{f}_{exciatation}(t)
+\end{equation}\]</div>
+<p>$$</p>
+<p>with:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\vec{a}\)</span> as the vessel acceleration</p></li>
+<li><p><span class="math notranslate nohighlight">\(\vec{u}\)</span> as the vessel displacement</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="TIDHA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="linear_pile_force_theory.html" class="btn btn-neutral float-right" title="Linear Pile Force Theory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, nedisy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
