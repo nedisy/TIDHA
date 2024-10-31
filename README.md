@@ -11,7 +11,7 @@ Curretly this only contain first order time series solver that use `scipy.integr
 
 ## Usage
 To use this project at the current state, follows steps below to run the example file:
-1. Install python, version 3.8 to 3.12 should works, I havent test other versions. Check if your system already have python installed by opening terminal/command prompt and run `python`. The terminal will give your python version or error if it haven't been installed yet.
+1. Install python, version 3.11. Check if your system already have python installed by opening terminal/command prompt and run `python`. The terminal will give your python version or error if it haven't been installed yet.
 2. Open terminal in the current directory. Windows users can open terminal in the current directory by opening context menu with shift + right click in the current directory windows explorer.
 3. Create virtual environment by running belows command on the terminal: `python -m venv .`. The command should work for any python version above 3.3.
 4. Activate the environment in the terminal by running: `Scripts\activate`.
